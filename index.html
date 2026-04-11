@@ -6,89 +6,67 @@
 <title>Abel Trading Journal</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f1117;color:#e0e0e0;min-height:100vh}
-
-.app{display:flex;min-height:100vh}
-.sidebar{width:200px;min-width:200px;background:#161b27;border-right:1px solid #1e2535;display:flex;flex-direction:column;position:fixed;height:100vh;z-index:10}
-.logo{padding:1.25rem;font-size:16px;font-weight:600;border-bottom:1px solid #1e2535}
-.logo span{color:#3b82f6}
-.balance-box{margin:1rem;padding:0.75rem 1rem;background:#0f1117;border-radius:8px;border:1px solid #1e2535}
-.balance-box .bl{font-size:10px;color:#8892a4;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
-.balance-box .bv{font-size:18px;font-weight:600;color:#10b981}
-.balance-box .bs{font-size:10px;color:#8892a4;margin-top:3px}
-.nav{padding:0.5rem 0;flex:1}
-.ni{padding:11px 1.25rem;font-size:13px;color:#8892a4;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s}
-.ni:hover{background:#1e2535;color:#e0e0e0}
-.ni.on{color:#3b82f6;border-left-color:#3b82f6;background:#1a2640}
-.apidot{padding:1rem 1.25rem;border-top:1px solid #1e2535;font-size:11px;color:#8892a4}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
-.main{flex:1;margin-left:200px;padding:2rem}
-
-.tab{display:none}.tab.on{display:block}
-.row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
-.ttl{font-size:18px;font-weight:600;color:#e0e0e0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:1rem}
-.fg{display:flex;flex-direction:column;gap:6px}
-.fg label{font-size:11px;font-weight:500;color:#8892a4;text-transform:uppercase;letter-spacing:0.04em}
-.fg input,.fg select{height:38px;padding:0 12px;border:1px solid #1e2535;border-radius:8px;background:#161b27;color:#e0e0e0;font-size:13px;width:100%}
-.fg input:focus,.fg select:focus{outline:none;border-color:#3b82f6}
-.fg select option{background:#161b27}
-.calcbar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:1.25rem;background:#161b27;border-radius:10px;margin:1rem 0;border:1px solid #1e2535}
-.ci .cl{font-size:11px;color:#8892a4;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.04em}
-.ci .cv{font-size:16px;font-weight:600;color:#e0e0e0}
-.cv.pos{color:#10b981}.cv.neg{color:#ef4444}
-.btnrow{display:flex;gap:12px;margin-top:1rem}
-.btn{height:42px;padding:0 1.5rem;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all 0.15s}
-.bwin{background:#10b981;color:#fff;flex:1}.bwin:hover{background:#059669}
-.blose{background:#ef4444;color:#fff;flex:1}.blose:hover{background:#dc2626}
-.bsec{background:transparent;color:#3b82f6;border:1px solid #3b82f6;padding:0 1.25rem}.bsec:hover{background:#1a2640}
-.bsm{background:#161b27;color:#8892a4;border:1px solid #1e2535;font-size:12px;height:36px;padding:0 1rem}.bsm:hover{background:#1e2535;color:#e0e0e0}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1rem}
-.mc{background:#161b27;border:1px solid #1e2535;border-radius:10px;padding:1.1rem}
-.mc .ml{font-size:11px;color:#8892a4;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em}
-.mc .mv{font-size:22px;font-weight:600;color:#e0e0e0}
-.mv.pos{color:#10b981}.mv.neg{color:#ef4444}
-.tblwrap{overflow-x:auto;border:1px solid #1e2535;border-radius:10px}
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;color:#8892a4;border-bottom:1px solid #1e2535;text-transform:uppercase;background:#161b27;white-space:nowrap}
-.tbl td{padding:11px 14px;border-bottom:1px solid #1e2535;color:#e0e0e0;white-space:nowrap}
-.tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:#1a2030}
-.badge{display:inline-block;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:600}
-.bl{background:#0d2e1e;color:#10b981}.bs{background:#2d1515;color:#ef4444}
-.bw{background:#0d2e1e;color:#10b981}.bo{background:#2d1515;color:#ef4444}
-.note{text-align:center;color:#8892a4;padding:3rem;font-size:13px}
-.divider{height:1px;background:#1e2535;margin:1.5rem 0}
-.chartrow{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
-.chartbox{background:#161b27;border:1px solid #1e2535;border-radius:10px;padding:1.25rem}
-.chtitle{font-size:12px;font-weight:600;color:#8892a4;margin-bottom:1rem;text-transform:uppercase}
-#toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;display:none;z-index:999}
-.tok{background:#10b981;color:#fff}.terr{background:#ef4444;color:#fff}.tinfo{background:#3b82f6;color:#fff}
-.datefilter{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;padding:1rem;background:#161b27;border-radius:10px;border:1px solid #1e2535}
-.datefilter label{font-size:11px;color:#8892a4;text-transform:uppercase;letter-spacing:0.04em}
-.datefilter input{height:34px;padding:0 10px;border:1px solid #1e2535;border-radius:8px;background:#0f1117;color:#e0e0e0;font-size:13px}
-
-@media (max-width:768px){
-  .app{flex-direction:column}
-  .sidebar{width:100%;min-width:100%;height:auto;position:relative;flex-direction:column}
-  .balance-box{margin:0.75rem 1rem}
-  .nav{display:flex;flex-direction:row;overflow-x:auto;padding:0;border-top:1px solid #1e2535;border-bottom:1px solid #1e2535}
-  .ni{padding:10px 1rem;border-left:none!important;border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0}
-  .ni.on{border-left:none!important;border-bottom:2px solid #3b82f6!important;background:transparent!important}
-  .apidot{display:none}
-  .main{margin-left:0!important;padding:1rem}
-  .metrics{grid-template-columns:repeat(2,1fr)!important;gap:8px}
-  .calcbar{grid-template-columns:repeat(2,1fr)!important;gap:8px}
-  .chartrow{grid-template-columns:1fr!important}
-  .grid{grid-template-columns:1fr!important}
-  .btnrow{flex-direction:column}
-  .bwin,.blose{flex:none;width:100%}
-  .tbl th,.tbl td{padding:7px 10px;font-size:11px}
-  .datefilter input{width:120px}
-  .mc .mv{font-size:17px}
-  .ttl{font-size:15px}
-}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f1117;color:#e0e0e0;min-height:100vh}
+  .app{display:flex;min-height:100vh}
+  .sidebar{width:200px;min-width:200px;background:#161b27;border-right:1px solid #1e2535;display:flex;flex-direction:column;position:fixed;height:100vh}
+  .logo{padding:1.25rem;font-size:16px;font-weight:600;border-bottom:1px solid #1e2535}
+  .logo span{color:#3b82f6}
+  .balance-box{margin:1rem;padding:0.75rem 1rem;background:#0f1117;border-radius:8px;border:1px solid #1e2535}
+  .balance-box .bl{font-size:10px;color:#8892a4;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
+  .balance-box .bv{font-size:18px;font-weight:600;color:#10b981}
+  .balance-box .bs{font-size:10px;color:#8892a4;margin-top:3px}
+  .nav{padding:0.5rem 0;flex:1}
+  .ni{padding:11px 1.25rem;font-size:13px;color:#8892a4;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s}
+  .ni:hover{background:#1e2535;color:#e0e0e0}
+  .ni.on{color:#3b82f6;border-left-color:#3b82f6;background:#1a2640}
+  .apidot{padding:1rem 1.25rem;border-top:1px solid #1e2535;font-size:11px;color:#8892a4}
+  .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
+  .main{flex:1;margin-left:200px;padding:2rem}
+  .tab{display:none}.tab.on{display:block}
+  .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:10px}
+  .ttl{font-size:18px;font-weight:600;color:#e0e0e0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:1rem}
+  .fg{display:flex;flex-direction:column;gap:6px}
+  .fg label{font-size:11px;font-weight:500;color:#8892a4;text-transform:uppercase;letter-spacing:0.04em}
+  .fg input,.fg select{height:38px;padding:0 12px;border:1px solid #1e2535;border-radius:8px;background:#161b27;color:#e0e0e0;font-size:13px;width:100%}
+  .fg input:focus,.fg select:focus{outline:none;border-color:#3b82f6}
+  .fg select option{background:#161b27}
+  .calcbar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:1.25rem;background:#161b27;border-radius:10px;margin:1rem 0;border:1px solid #1e2535}
+  .ci .cl{font-size:11px;color:#8892a4;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.04em}
+  .ci .cv{font-size:16px;font-weight:600;color:#e0e0e0}
+  .cv.pos{color:#10b981}.cv.neg{color:#ef4444}
+  .btnrow{display:flex;gap:12px;margin-top:1rem;flex-wrap:wrap}
+  .btn{height:42px;padding:0 1.5rem;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all 0.15s}
+  .bwin{background:#10b981;color:#fff;flex:1}.bwin:hover{background:#059669}
+  .blose{background:#ef4444;color:#fff;flex:1}.blose:hover{background:#dc2626}
+  .bsec{background:transparent;color:#3b82f6;border:1px solid #3b82f6;padding:0 1.25rem}.bsec:hover{background:#1a2640}
+  .bsm{background:#161b27;color:#8892a4;border:1px solid #1e2535;font-size:12px;height:36px;padding:0 1rem}.bsm:hover{background:#1e2535;color:#e0e0e0}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1rem}
+  .mc{background:#161b27;border:1px solid #1e2535;border-radius:10px;padding:1.1rem}
+  .mc .ml{font-size:11px;color:#8892a4;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em}
+  .mc .mv{font-size:22px;font-weight:600;color:#e0e0e0}
+  .mv.pos{color:#10b981}.mv.neg{color:#ef4444}
+  .tblwrap{overflow-x:auto;border:1px solid #1e2535;border-radius:10px}
+  .tbl{width:100%;border-collapse:collapse;font-size:12px}
+  .tbl th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;color:#8892a4;border-bottom:1px solid #1e2535;text-transform:uppercase;letter-spacing:0.04em;background:#161b27}
+  .tbl td{padding:11px 14px;border-bottom:1px solid #1e2535;color:#e0e0e0}
+  .tbl tr:last-child td{border-bottom:none}
+  .tbl tr:hover td{background:#1a2030}
+  .badge{display:inline-block;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:600}
+  .bl{background:#0d2e1e;color:#10b981}.bs{background:#2d1515;color:#ef4444}
+  .bw{background:#0d2e1e;color:#10b981}.bo{background:#2d1515;color:#ef4444}
+  .note{text-align:center;color:#8892a4;padding:3rem;font-size:13px}
+  .divider{height:1px;background:#1e2535;margin:1.5rem 0}
+  .chartrow{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+  .chartbox{background:#161b27;border:1px solid #1e2535;border-radius:10px;padding:1.25rem}
+  .chtitle{font-size:12px;font-weight:600;color:#8892a4;margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.04em}
+  #toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;display:none;z-index:999}
+  .tok{background:#10b981;color:#fff}.terr{background:#ef4444;color:#fff}.tinfo{background:#3b82f6;color:#fff}
+  .datefilter{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;padding:1rem;background:#161b27;border-radius:10px;border:1px solid #1e2535}
+  .datefilter label{font-size:11px;color:#8892a4;text-transform:uppercase;letter-spacing:0.04em}
+  .datefilter input{height:34px;padding:0 10px;border:1px solid #1e2535;border-radius:8px;background:#0f1117;color:#e0e0e0;font-size:13px}
+  .datefilter input:focus{outline:none;border-color:#3b82f6}
 </style>
 </head>
 <body>
@@ -113,8 +91,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="main">
+    <!-- REGISTRAR -->
     <div id="tab-registrar" class="tab on">
-      <div class="row"><div class="ttl">Nuevo trade</div></div>
+      <div class="row">
+        <div class="ttl">Nuevo trade</div>
+      </div>
       <div class="grid">
         <div class="fg"><label>Par</label>
           <select id="fpar" onchange="calc()">
@@ -170,6 +151,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
 
+    <!-- HISTORIAL -->
     <div id="tab-historial" class="tab">
       <div class="row">
         <div class="ttl">Historial de trades</div>
@@ -186,14 +168,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
 
+    <!-- REPORTES -->
     <div id="tab-reportes" class="tab">
       <div class="row">
         <div class="ttl">Reportes</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="display:flex;gap:8px">
           <button class="btn bsm" onclick="exportCSVFiltered()">Excel / CSV</button>
           <button class="btn bsm" onclick="exportPDF()">PDF</button>
         </div>
       </div>
+
       <div class="datefilter">
         <label>Desde</label>
         <input type="date" id="fDesde" onchange="applyDateFilter()">
@@ -201,6 +185,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <input type="date" id="fHasta" onchange="applyDateFilter()">
         <button class="btn bsm" onclick="clearDates()">Ver todo</button>
       </div>
+
       <div class="metrics">
         <div class="mc"><div class="ml">Winrate</div><div class="mv" id="rwr">—</div></div>
         <div class="mc"><div class="ml">Ganancia neta</div><div class="mv" id="rnet">—</div></div>
@@ -216,12 +201,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="chartrow">
         <div class="chartbox">
           <div class="chtitle">PNL neto por par</div>
-          <div style="position:relative;height:220px"><canvas id="chartPar" role="img" aria-label="PNL por par">PNL por par</canvas></div>
+          <div style="position:relative;height:240px"><canvas id="chartPar" role="img" aria-label="PNL por par">PNL por par</canvas></div>
           <div id="legendPar" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;font-size:12px;color:#8892a4"></div>
         </div>
         <div class="chartbox">
           <div class="chtitle">Ganadas vs perdidas</div>
-          <div style="position:relative;height:220px"><canvas id="chartWL" role="img" aria-label="Ganadas vs perdidas">Ganadas vs perdidas</canvas></div>
+          <div style="position:relative;height:240px"><canvas id="chartWL" role="img" aria-label="Ganadas vs perdidas">Ganadas vs perdidas</canvas></div>
           <div id="legendWL" style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#8892a4"></div>
         </div>
       </div>
@@ -230,10 +215,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script>
-const SUPA_URL='https://xfpsirprehkxqutuqude.supabase.co';
-const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmcHNpcnByZWhreHF1dHVxdWRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjY1NTcsImV4cCI6MjA5MTUwMjU1N30.JDV8OvpHtH0zYIEaOR0IkHOem1rkKrgr1tF3PGQxwsI';
-const COLORS=['#3b82f6','#10b981','#f59e0b','#8b5cf6','#ef4444','#ec4899','#06b6d4','#84cc16'];
-let trades=[],chartPar,chartWL;
+const SUPA_URL = 'https://xfpsirprehkxqutuqude.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhmcHNpcnByZWhreHF1dHVxdWRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjY1NTcsImV4cCI6MjA5MTUwMjU1N30.JDV8OvpHtH0zYIEaOR0IkHOem1rkKrgr1tF3PGQxwsI';
+const COLORS = ['#3b82f6','#10b981','#f59e0b','#8b5cf6','#ef4444','#ec4899','#06b6d4','#84cc16'];
+let trades=[], chartPar, chartWL;
 
 function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=msg;t.className=type==='ok'?'tok':type==='err'?'terr':'tinfo';t.style.display='block';setTimeout(()=>t.style.display='none',3500)}
 
@@ -247,10 +232,18 @@ async function loadBalance(){
   try{
     const data=await supaFetch('GET','config?key=eq.usdt_balance');
     const sync=await supaFetch('GET','config?key=eq.last_sync');
-    if(data&&data.length)document.getElementById('balanceVal').textContent='$'+parseFloat(data[0].value).toFixed(2)+' USDT';
-    if(sync&&sync.length)document.getElementById('balanceSync').textContent='Actualizado: '+sync[0].value.replace('T',' ');
-    else document.getElementById('balanceSync').textContent='Ejecuta el script para sincronizar';
-  }catch(e){document.getElementById('balanceVal').textContent='—';document.getElementById('balanceSync').textContent='Sin datos';}
+    if(data&&data.length){
+      document.getElementById('balanceVal').textContent='$'+parseFloat(data[0].value).toFixed(2)+' USDT';
+    }
+    if(sync&&sync.length){
+      document.getElementById('balanceSync').textContent='Actualizado: '+sync[0].value.replace('T',' ');
+    } else {
+      document.getElementById('balanceSync').textContent='Ejecuta el script para sincronizar';
+    }
+  }catch(e){
+    document.getElementById('balanceVal').textContent='—';
+    document.getElementById('balanceSync').textContent='Sin datos';
+  }
 }
 
 async function loadTrades(desde='',hasta=''){
@@ -266,6 +259,10 @@ async function loadTrades(desde='',hasta=''){
     document.getElementById('apistatus').textContent='Error BD';
     trades=[];
   }
+}
+
+function getFilteredTrades(){
+  return trades;
 }
 
 async function applyDateFilter(){
@@ -342,11 +339,11 @@ function renderHistory(){
   tbody.innerHTML=trades.map(t=>`<tr>
     <td style="font-weight:600">${t.par}</td>
     <td><span class="badge ${t.tipo==='LONG'?'bl':'bs'}">${t.tipo}</span></td>
-    <td style="color:#8892a4">${(t.fecha||'').replace('T',' ')}</td>
+    <td style="color:#8892a4;font-size:12px">${(t.fecha||'').replace('T',' ')}</td>
     <td>$${(t.monto||0).toFixed(2)}</td>
     <td>${t.apalancamiento||1}x</td>
-    <td>${t.precio_entrada||'—'}</td>
-    <td>${t.precio_cierre||'—'}</td>
+    <td style="font-size:12px">${t.precio_entrada||'—'}</td>
+    <td style="font-size:12px">${t.precio_cierre||'—'}</td>
     <td style="color:${(t.pnl_bruto||0)>=0?'#10b981':'#ef4444'}">${(t.pnl_bruto||0)>=0?'+':''}$${(t.pnl_bruto||0).toFixed(4)}</td>
     <td style="color:#ef4444">-$${(t.fees||0).toFixed(2)}</td>
     <td style="font-weight:600;color:${(t.pnl_neto||0)>=0?'#10b981':'#ef4444'}">${(t.pnl_neto||0)>=0?'+':''}$${(t.pnl_neto||0).toFixed(4)}</td>
@@ -356,30 +353,33 @@ function renderHistory(){
 }
 
 function renderReportes(){
-  if(!trades.length){
+  const filtered=getFilteredTrades();
+  if(!filtered.length){
     ['rwr','rnet','rtot','rpf','rgan','rfee','rbest'].forEach(id=>document.getElementById(id).textContent='—');
     return;
   }
-  const wins=trades.filter(t=>t.resultado==='win');
-  const loses=trades.filter(t=>t.resultado==='lose');
-  const wr=Math.round((wins.length/trades.length)*100);
-  const neta=trades.reduce((s,t)=>s+(parseFloat(t.pnl_neto)||0),0);
-  const totalFees=trades.reduce((s,t)=>s+(parseFloat(t.fees)||0),0);
-  const totalGan=wins.reduce((s,t)=>s+Math.max(parseFloat(t.pnl_neto)||0,0),0);
-  const totalPer=Math.abs(loses.reduce((s,t)=>s+Math.min(parseFloat(t.pnl_neto)||0,0),0));
+  const wins=filtered.filter(t=>t.resultado==='win');
+  const loses=filtered.filter(t=>t.resultado==='lose');
+  const wr=Math.round((wins.length/filtered.length)*100);
+  const totalGan=wins.reduce((s,t)=>s+Math.max(t.pnl_neto||0,0),0);
+  const totalPer=Math.abs(loses.reduce((s,t)=>s+Math.min(t.pnl_neto||0,0),0));
+  const totalPnlBruto=filtered.reduce((s,t)=>s+(t.pnl_bruto||0),0);
+  const neta=filtered.reduce((s,t)=>s+(t.pnl_neto||0),0);
+  const totalFees=filtered.reduce((s,t)=>s+(t.fees||0),0);
+  const balanceReal=neta-totalFees;
   const pf=totalPer>0?(totalGan/totalPer).toFixed(2):'∞';
   const byPar={};
-  trades.forEach(t=>{byPar[t.par]=(byPar[t.par]||0)+(parseFloat(t.pnl_neto)||0);});
+  filtered.forEach(t=>{byPar[t.par]=(byPar[t.par]||0)+(t.pnl_neto||0);});
   const bestPar=Object.entries(byPar).sort((a,b)=>b[1]-a[1])[0];
 
   document.getElementById('rwr').textContent=wr+'%';
   document.getElementById('rwr').className='mv '+(wr>=50?'pos':'neg');
   document.getElementById('rnet').textContent=(neta>=0?'+':'')+'$'+neta.toFixed(2);
   document.getElementById('rnet').className='mv '+(neta>=0?'pos':'neg');
-  document.getElementById('rtot').textContent=trades.length;
+  document.getElementById('rtot').textContent=filtered.length;
   document.getElementById('rpf').textContent=pf;
-  document.getElementById('rgan').textContent=(neta>=0?'+':'')+'$'+neta.toFixed(2);
-  document.getElementById('rgan').className='mv '+(neta>=0?'pos':'neg');
+  document.getElementById('rgan').textContent=(balanceReal>=0?'+':'')+'$'+balanceReal.toFixed(2);
+  document.getElementById('rgan').className='mv '+(balanceReal>=0?'pos':'neg');
   document.getElementById('rfee').textContent='-$'+totalFees.toFixed(2);
   document.getElementById('rbest').textContent=bestPar?bestPar[0].split('/')[0]:'—';
 
@@ -402,19 +402,24 @@ function exportCSV(){
 }
 
 function exportCSVFiltered(){
-  if(!trades.length){alert('Sin trades');return;}
-  exportCSV();
+  const filtered=getFilteredTrades();
+  if(!filtered.length){alert('Sin trades en el rango seleccionado');return;}
+  const h=['Par','Tipo','Señal','Fecha','Monto','Apalancamiento','Entrada','Cierre','PNL Bruto','Fees','PNL Neto','Resultado','Notas'];
+  const rows=filtered.map(t=>[t.par,t.tipo,t.senal,t.fecha,t.monto,t.apalancamiento,t.precio_entrada,t.precio_cierre,t.pnl_bruto,t.fees,t.pnl_neto,t.resultado,t.notas]);
+  const csv=[h,...rows].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='reporte-trades.csv';a.click();
 }
 
 function exportPDF(){
-  if(!trades.length){alert('Sin trades');return;}
-  const wins=trades.filter(t=>t.resultado==='win').length;
-  const neta=trades.reduce((s,t)=>s+(parseFloat(t.pnl_neto)||0),0);
-  const fees=trades.reduce((s,t)=>s+(parseFloat(t.fees)||0),0);
+  const filtered=getFilteredTrades();
+  if(!filtered.length){alert('Sin trades');return;}
+  const wins=filtered.filter(t=>t.resultado==='win').length;
+  const neta=filtered.reduce((s,t)=>s+(t.pnl_neto||0),0);
+  const fees=filtered.reduce((s,t)=>s+(t.fees||0),0);
   const desde=document.getElementById('fDesde').value||'Inicio';
   const hasta=document.getElementById('fHasta').value||'Hoy';
-  const rows=trades.map(t=>`<tr><td>${t.par}</td><td>${t.tipo}</td><td>${(t.fecha||'').replace('T',' ')}</td><td>$${t.monto}</td><td>${t.apalancamiento}x</td><td>${t.precio_entrada}</td><td>${t.precio_cierre}</td><td style="color:${(parseFloat(t.pnl_bruto)||0)>=0?'#059669':'#dc2626'}">${(parseFloat(t.pnl_bruto)||0)>=0?'+':''}$${(parseFloat(t.pnl_bruto)||0).toFixed(2)}</td><td style="color:#dc2626">-$${(parseFloat(t.fees)||0).toFixed(2)}</td><td style="font-weight:bold;color:${(parseFloat(t.pnl_neto)||0)>=0?'#059669':'#dc2626'}">${(parseFloat(t.pnl_neto)||0)>=0?'+':''}$${(parseFloat(t.pnl_neto)||0).toFixed(2)}</td><td>${t.resultado==='win'?'Ganó':'Perdió'}</td></tr>`).join('');
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Abel Trading Journal</title><style>body{font-family:Arial,sans-serif;padding:30px;color:#1a1a1a}h1{color:#2563eb}.sum{display:flex;gap:24px;margin:20px 0;padding:16px;background:#f8fafc;border-radius:10px}.si{text-align:center}.si .sl{font-size:11px;color:#64748b;text-transform:uppercase}.si .sv{font-size:20px;font-weight:700}table{width:100%;border-collapse:collapse;font-size:12px}th{background:#2563eb;color:white;padding:9px 10px;text-align:left}td{padding:8px 10px;border-bottom:1px solid #f1f5f9}tr:nth-child(even){background:#f8fafc}</style></head><body><h1>Abel Trading Journal</h1><p style="color:#64748b;font-size:13px">Periodo: ${desde} → ${hasta} | ${new Date().toLocaleString('es-DO')}</p><div class="sum"><div class="si"><div class="sl">Trades</div><div class="sv">${trades.length}</div></div><div class="si"><div class="sl">Winrate</div><div class="sv" style="color:${Math.round(wins/trades.length*100)>=50?'#059669':'#dc2626'}">${Math.round(wins/trades.length*100)}%</div></div><div class="si"><div class="sl">PNL neto</div><div class="sv" style="color:${neta>=0?'#059669':'#dc2626'}">${neta>=0?'+':''}$${neta.toFixed(2)}</div></div><div class="si"><div class="sl">Fees</div><div class="sv" style="color:#dc2626">-$${fees.toFixed(2)}</div></div></div><table><thead><tr><th>Par</th><th>Tipo</th><th>Fecha</th><th>Monto</th><th>Apal.</th><th>Entrada</th><th>Cierre</th><th>PNL Bruto</th><th>Fees</th><th>PNL Neto</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
+  const rows=filtered.map(t=>`<tr><td>${t.par}</td><td>${t.tipo}</td><td>${(t.fecha||'').replace('T',' ')}</td><td>$${t.monto}</td><td>${t.apalancamiento}x</td><td>${t.precio_entrada}</td><td>${t.precio_cierre}</td><td style="color:${(t.pnl_bruto||0)>=0?'#059669':'#dc2626'}">${(t.pnl_bruto||0)>=0?'+':''}$${(t.pnl_bruto||0).toFixed(2)}</td><td style="color:#dc2626">-$${(t.fees||0).toFixed(2)}</td><td style="font-weight:bold;color:${(t.pnl_neto||0)>=0?'#059669':'#dc2626'}">${(t.pnl_neto||0)>=0?'+':''}$${(t.pnl_neto||0).toFixed(2)}</td><td>${t.resultado==='win'?'Ganó':'Perdió'}</td></tr>`).join('');
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Abel Trading Journal</title><style>body{font-family:Arial,sans-serif;padding:30px;color:#1a1a1a}h1{color:#2563eb;margin-bottom:4px}.period{color:#64748b;font-size:13px;margin-bottom:20px}.sum{display:flex;gap:24px;margin:20px 0;padding:16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0}.si{text-align:center}.si .sl{font-size:11px;color:#64748b;margin-bottom:4px;text-transform:uppercase}.si .sv{font-size:20px;font-weight:700}table{width:100%;border-collapse:collapse;font-size:12px}th{background:#2563eb;color:white;padding:9px 10px;text-align:left;font-size:11px}td{padding:8px 10px;border-bottom:1px solid #f1f5f9}tr:nth-child(even){background:#f8fafc}</style></head><body><h1>Abel Trading Journal</h1><div class="period">Periodo: ${desde} → ${hasta} | Generado: ${new Date().toLocaleString('es-DO')}</div><div class="sum"><div class="si"><div class="sl">Trades</div><div class="sv">${filtered.length}</div></div><div class="si"><div class="sl">Winrate</div><div class="sv" style="color:${Math.round(wins/filtered.length*100)>=50?'#059669':'#dc2626'}">${Math.round(wins/filtered.length*100)}%</div></div><div class="si"><div class="sl">PNL neto</div><div class="sv" style="color:${neta>=0?'#059669':'#dc2626'}">${neta>=0?'+':''}$${neta.toFixed(2)}</div></div><div class="si"><div class="sl">Fees</div><div class="sv" style="color:#dc2626">-$${fees.toFixed(2)}</div></div></div><table><thead><tr><th>Par</th><th>Tipo</th><th>Fecha</th><th>Monto</th><th>Apal.</th><th>Entrada</th><th>Cierre</th><th>PNL Bruto</th><th>Fees</th><th>PNL Neto</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
   const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),500);
 }
 

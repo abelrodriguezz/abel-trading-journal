@@ -193,7 +193,7 @@
         <div class="mc"><div class="ml">Profit factor</div><div class="mv" id="rpf">—</div></div>
       </div>
       <div class="metrics">
-        <div class="mc" style="grid-column:span 2"><div class="ml">Balance total (ganancias - pérdidas)</div><div class="mv" id="rgan">—</div></div>
+        <div class="mc"><div class="ml">Balance total</div><div class="mv" id="rgan">—</div></div>
         <div class="mc"><div class="ml">Fees pagados</div><div class="mv neg" id="rfee">—</div></div>
         <div class="mc"><div class="ml">Mejor par</div><div class="mv" id="rbest">—</div></div>
       </div>
@@ -372,9 +372,8 @@ function renderReportes(){
   document.getElementById('rnet').className='mv '+(neta>=0?'pos':'neg');
   document.getElementById('rtot').textContent=filtered.length;
   document.getElementById('rpf').textContent=pf;
-  const balanceTotal=totalGan-totalPer;
-  document.getElementById('rgan').textContent=(balanceTotal>=0?'+':'')+'$'+balanceTotal.toFixed(2);
-  document.getElementById('rgan').className='mv '+(balanceTotal>=0?'pos':'neg');
+  document.getElementById('rgan').textContent=(neta>=0?'+':'')+'$'+neta.toFixed(2);
+  document.getElementById('rgan').className='mv '+(neta>=0?'pos':'neg');
   document.getElementById('rfee').textContent='-$'+totalFees.toFixed(2);
   document.getElementById('rbest').textContent=bestPar?bestPar[0].split('/')[0]:'—';
 

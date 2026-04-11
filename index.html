@@ -366,7 +366,7 @@ function renderReportes(){
   const totalPnlBruto=filtered.reduce((s,t)=>s+(t.pnl_bruto||0),0);
   const neta=filtered.reduce((s,t)=>s+(t.pnl_neto||0),0);
   const totalFees=filtered.reduce((s,t)=>s+(t.fees||0),0);
-  const balanceReal=neta-totalFees;
+  const balanceReal=neta;
   const pf=totalPer>0?(totalGan/totalPer).toFixed(2):'∞';
   const byPar={};
   filtered.forEach(t=>{byPar[t.par]=(byPar[t.par]||0)+(t.pnl_neto||0);});

@@ -202,10 +202,9 @@
 
       <div class="datefilter">
         <label>Desde</label>
-        <input type="date" id="fDesde">
+        <input type="date" id="fDesde" onchange="applyDateFilter()">
         <label>Hasta</label>
-        <input type="date" id="fHasta">
-        <button class="btn bsm" onclick="applyDateFilter()">Buscar</button>
+        <input type="date" id="fHasta" onchange="applyDateFilter()">
         <button class="btn bsm" onclick="clearDates()">Ver todo</button>
       </div>
 
@@ -269,11 +268,9 @@ async function loadBalance(){
   }
 }
 
-async function loadTrades(desde='',hasta=''){
+async function loadTrades(){
   try{
     let q='trades?order=fecha.desc';
-    if(desde)q+='&fecha=gte.'+desde+' 00:00:00';
-    if(hasta)q+='&fecha=lte.'+hasta+' 23:59:59';
     trades=await supaFetch('GET',q);
     document.getElementById('apidot').style.background='#10b981';
     document.getElementById('apistatus').textContent='Supabase OK';
@@ -285,29 +282,24 @@ async function loadTrades(desde='',hasta=''){
 }
 
 function getFilteredTrades(){
-  return trades;
+  const desde=document.getElementById('fDesde').value;
+  const hasta=document.getElementById('fHasta').value;
+  if(!desde&&!hasta)return trades;
+  return trades.filter(t=>{
+    const f=(t.fecha||''). slice(0,10);
+    if(desde&&f<desde)return false;
+    if(hasta&&f>hasta)return false;
+    return true;
+  });
 }
 
 async function applyDateFilter(){
-  let desde=document.getElementById('fDesde').value;
-  let hasta=document.getElementById('fHasta').value;
-  // Ensure YYYY-MM-DD format for Supabase
-  if(desde&&!/^\d{4}-\d{2}-\d{2}$/.test(desde)){
-    const d=new Date(desde);
-    desde=d.toISOString().slice(0,10);
-  }
-  if(hasta&&!/^\d{4}-\d{2}-\d{2}$/.test(hasta)){
-    const d=new Date(hasta);
-    hasta=d.toISOString().slice(0,10);
-  }
-  await loadTrades(desde,hasta);
   renderReportes();
 }
 
 async function clearDates(){
   document.getElementById('fDesde').value='';
   document.getElementById('fHasta').value='';
-  await loadTrades();
   renderReportes();
 }
 

@@ -268,9 +268,21 @@ async function loadBalance(){
   }
 }
 
-async function loadTrades(){
+async function loadTrades(desde='',hasta=''){
   try{
-    trades=await supaFetch('GET','trades?order=fecha.desc');
+    let q='trades?order=fecha.desc';
+    if(desde)q+='&fecha=gte.'+desde+' 00:00:00';
+    if(hasta)q+='&fecha=lte.'+hasta+' 23:59:59';
+    const raw=await supaFetch('GET',q);
+    trades=raw.map(t=>({...t,
+      pnl_bruto:parseFloat(t.pnl_bruto)||0,
+      pnl_neto:parseFloat(t.pnl_neto)||0,
+      fees:parseFloat(t.fees)||0,
+      monto:parseFloat(t.monto)||0,
+      apalancamiento:parseFloat(t.apalancamiento)||1,
+      precio_entrada:parseFloat(t.precio_entrada)||0,
+      precio_cierre:parseFloat(t.precio_cierre)||0
+    }));
     document.getElementById('apidot').style.background='#10b981';
     document.getElementById('apistatus').textContent='Supabase OK';
   }catch(e){
@@ -281,24 +293,20 @@ async function loadTrades(){
 }
 
 function getFilteredTrades(){
-  const desde=document.getElementById('fDesde').value;
-  const hasta=document.getElementById('fHasta').value;
-  if(!desde&&!hasta)return trades;
-  return trades.filter(t=>{
-    const f=(t.fecha||'').slice(0,10);
-    if(desde&&f<desde)return false;
-    if(hasta&&f>hasta)return false;
-    return true;
-  });
+  return trades;
 }
 
-function applyDateFilter(){
+async function applyDateFilter(){
+  const desde=document.getElementById('fDesde').value;
+  const hasta=document.getElementById('fHasta').value;
+  await loadTrades(desde,hasta);
   renderReportes();
 }
 
-function clearDates(){
+async function clearDates(){
   document.getElementById('fDesde').value='';
   document.getElementById('fHasta').value='';
+  await loadTrades();
   renderReportes();
 }
 

@@ -270,8 +270,7 @@ async function loadBalance(){
 
 async function loadTrades(){
   try{
-    let q='trades?order=fecha.desc';
-    trades=await supaFetch('GET',q);
+    trades=await supaFetch('GET','trades?order=fecha.desc');
     document.getElementById('apidot').style.background='#10b981';
     document.getElementById('apistatus').textContent='Supabase OK';
   }catch(e){
@@ -286,18 +285,18 @@ function getFilteredTrades(){
   const hasta=document.getElementById('fHasta').value;
   if(!desde&&!hasta)return trades;
   return trades.filter(t=>{
-    const f=(t.fecha||''). slice(0,10);
+    const f=(t.fecha||'').slice(0,10);
     if(desde&&f<desde)return false;
     if(hasta&&f>hasta)return false;
     return true;
   });
 }
 
-async function applyDateFilter(){
+function applyDateFilter(){
   renderReportes();
 }
 
-async function clearDates(){
+function clearDates(){
   document.getElementById('fDesde').value='';
   document.getElementById('fHasta').value='';
   renderReportes();

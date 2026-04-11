@@ -85,8 +85,8 @@
     .bwin,.blose{flex:none;width:100%}
     .mc .mv{font-size:17px}
     .ttl{font-size:15px}
-    .datefilter{gap:8px}
-    .datefilter input{width:130px}
+    .datefilter{flex-direction:column;align-items:flex-start;gap:8px}
+    .datefilter input{width:100%}
     .row{gap:6px}
   }
 </style>
@@ -459,8 +459,8 @@ function exportPDF(){
     .bwin,.blose{flex:none;width:100%}
     .mc .mv{font-size:17px}
     .ttl{font-size:15px}
-    .datefilter{gap:8px}
-    .datefilter input{width:130px}
+    .datefilter{flex-direction:column;align-items:flex-start;gap:8px}
+    .datefilter input{width:100%}
     .row{gap:6px}
   }
 </style></head><body><h1>Abel Trading Journal</h1><div class="period">Periodo: ${desde} → ${hasta} | Generado: ${new Date().toLocaleString('es-DO')}</div><div class="sum"><div class="si"><div class="sl">Trades</div><div class="sv">${filtered.length}</div></div><div class="si"><div class="sl">Winrate</div><div class="sv" style="color:${Math.round(wins/filtered.length*100)>=50?'#059669':'#dc2626'}">${Math.round(wins/filtered.length*100)}%</div></div><div class="si"><div class="sl">PNL neto</div><div class="sv" style="color:${neta>=0?'#059669':'#dc2626'}">${neta>=0?'+':''}$${neta.toFixed(2)}</div></div><div class="si"><div class="sl">Fees</div><div class="sv" style="color:#dc2626">-$${fees.toFixed(2)}</div></div></div><table><thead><tr><th>Par</th><th>Tipo</th><th>Fecha</th><th>Monto</th><th>Apal.</th><th>Entrada</th><th>Cierre</th><th>PNL Bruto</th><th>Fees</th><th>PNL Neto</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;

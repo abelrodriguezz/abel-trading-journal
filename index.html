@@ -193,8 +193,7 @@
         <div class="mc"><div class="ml">Profit factor</div><div class="mv" id="rpf">—</div></div>
       </div>
       <div class="metrics">
-        <div class="mc"><div class="ml">Total ganado</div><div class="mv pos" id="rgan">—</div></div>
-        <div class="mc"><div class="ml">Total perdido</div><div class="mv neg" id="rper">—</div></div>
+        <div class="mc" style="grid-column:span 2"><div class="ml">Balance total (ganancias - pérdidas)</div><div class="mv" id="rgan">—</div></div>
         <div class="mc"><div class="ml">Fees pagados</div><div class="mv neg" id="rfee">—</div></div>
         <div class="mc"><div class="ml">Mejor par</div><div class="mv" id="rbest">—</div></div>
       </div>
@@ -352,7 +351,7 @@ function renderHistory(){
 function renderReportes(){
   const filtered=getFilteredTrades();
   if(!filtered.length){
-    ['rwr','rnet','rtot','rpf','rgan','rper','rfee','rbest'].forEach(id=>document.getElementById(id).textContent='—');
+    ['rwr','rnet','rtot','rpf','rgan','rfee','rbest'].forEach(id=>document.getElementById(id).textContent='—');
     return;
   }
   const wins=filtered.filter(t=>t.resultado==='win');
@@ -373,8 +372,9 @@ function renderReportes(){
   document.getElementById('rnet').className='mv '+(neta>=0?'pos':'neg');
   document.getElementById('rtot').textContent=filtered.length;
   document.getElementById('rpf').textContent=pf;
-  document.getElementById('rgan').textContent='+$'+totalGan.toFixed(2);
-  document.getElementById('rper').textContent='-$'+totalPer.toFixed(2);
+  const balanceTotal=totalGan-totalPer;
+  document.getElementById('rgan').textContent=(balanceTotal>=0?'+':'')+'$'+balanceTotal.toFixed(2);
+  document.getElementById('rgan').className='mv '+(balanceTotal>=0?'pos':'neg');
   document.getElementById('rfee').textContent='-$'+totalFees.toFixed(2);
   document.getElementById('rbest').textContent=bestPar?bestPar[0].split('/')[0]:'—';
 

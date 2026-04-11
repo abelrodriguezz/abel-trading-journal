@@ -202,9 +202,10 @@
 
       <div class="datefilter">
         <label>Desde</label>
-        <input type="date" id="fDesde" onchange="applyDateFilter()">
+        <input type="date" id="fDesde">
         <label>Hasta</label>
-        <input type="date" id="fHasta" onchange="applyDateFilter()">
+        <input type="date" id="fHasta">
+        <button class="btn bsm" onclick="applyDateFilter()">Buscar</button>
         <button class="btn bsm" onclick="clearDates()">Ver todo</button>
       </div>
 
@@ -288,8 +289,17 @@ function getFilteredTrades(){
 }
 
 async function applyDateFilter(){
-  const desde=document.getElementById('fDesde').value;
-  const hasta=document.getElementById('fHasta').value;
+  let desde=document.getElementById('fDesde').value;
+  let hasta=document.getElementById('fHasta').value;
+  // Ensure YYYY-MM-DD format for Supabase
+  if(desde&&!/^\d{4}-\d{2}-\d{2}$/.test(desde)){
+    const d=new Date(desde);
+    desde=d.toISOString().slice(0,10);
+  }
+  if(hasta&&!/^\d{4}-\d{2}-\d{2}$/.test(hasta)){
+    const d=new Date(hasta);
+    hasta=d.toISOString().slice(0,10);
+  }
   await loadTrades(desde,hasta);
   renderReportes();
 }

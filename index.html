@@ -341,13 +341,10 @@
     btn.textContent = 'Sincronizando...';
     btn.disabled = true;
     try {
-      const ts = Date.now();
-      const startTime = new Date('2026-04-09T00:00:00Z').getTime();
-      const res = await fetch(`https://fapi.binance.com/fapi/v1/userTrades?limit=50&startTime=${startTime}&timestamp=${ts}`, {
-        headers: { 'X-MBX-APIKEY': BINANCE_KEY }
-      });
-      if (!res.ok) throw new Error('Binance API error: '+res.status);
+      const res = await fetch('/api/binance');
+      if (!res.ok) throw new Error('Error al conectar con Binance: '+res.status);
       const data = await res.json();
+      if (data.code) throw new Error('Binance: '+data.msg);
       let nuevos = 0;
       for (const t of data) {
         const par = t.symbol.replace('USDT','/USDT');

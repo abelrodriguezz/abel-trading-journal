@@ -180,9 +180,9 @@
 
       <div class="datefilter">
         <label>Desde</label>
-        <input type="date" id="fDesde" onchange="renderReportes()">
+        <input type="date" id="fDesde" onchange="applyDateFilter()">
         <label>Hasta</label>
-        <input type="date" id="fHasta" onchange="renderReportes()">
+        <input type="date" id="fHasta" onchange="applyDateFilter()">
         <button class="btn bsm" onclick="clearDates()">Ver todo</button>
       </div>
 
@@ -246,9 +246,12 @@ async function loadBalance(){
   }
 }
 
-async function loadTrades(){
+async function loadTrades(desde='',hasta=''){
   try{
-    trades=await supaFetch('GET','trades?order=fecha.desc');
+    let q='trades?order=fecha.desc';
+    if(desde)q+='&fecha=gte.'+desde+'T00:00';
+    if(hasta)q+='&fecha=lte.'+hasta+'T23:59';
+    trades=await supaFetch('GET',q);
     document.getElementById('apidot').style.background='#10b981';
     document.getElementById('apistatus').textContent='Supabase OK';
   }catch(e){
@@ -259,19 +262,20 @@ async function loadTrades(){
 }
 
 function getFilteredTrades(){
-  const desde=document.getElementById('fDesde')?.value;
-  const hasta=document.getElementById('fHasta')?.value;
-  return trades.filter(t=>{
-    const f=(t.fecha||'').slice(0,10);
-    if(desde&&f<desde)return false;
-    if(hasta&&f>hasta)return false;
-    return true;
-  });
+  return trades;
 }
 
-function clearDates(){
+async function applyDateFilter(){
+  const desde=document.getElementById('fDesde').value;
+  const hasta=document.getElementById('fHasta').value;
+  await loadTrades(desde,hasta);
+  renderReportes();
+}
+
+async function clearDates(){
   document.getElementById('fDesde').value='';
   document.getElementById('fHasta').value='';
+  await loadTrades();
   renderReportes();
 }
 
@@ -359,8 +363,10 @@ function renderReportes(){
   const wr=Math.round((wins.length/filtered.length)*100);
   const totalGan=wins.reduce((s,t)=>s+Math.max(t.pnl_neto||0,0),0);
   const totalPer=Math.abs(loses.reduce((s,t)=>s+Math.min(t.pnl_neto||0,0),0));
+  const totalPnlBruto=filtered.reduce((s,t)=>s+(t.pnl_bruto||0),0);
   const neta=filtered.reduce((s,t)=>s+(t.pnl_neto||0),0);
   const totalFees=filtered.reduce((s,t)=>s+(t.fees||0),0);
+  const balanceReal=totalPnlBruto-totalFees;
   const pf=totalPer>0?(totalGan/totalPer).toFixed(2):'∞';
   const byPar={};
   filtered.forEach(t=>{byPar[t.par]=(byPar[t.par]||0)+(t.pnl_neto||0);});
@@ -372,8 +378,8 @@ function renderReportes(){
   document.getElementById('rnet').className='mv '+(neta>=0?'pos':'neg');
   document.getElementById('rtot').textContent=filtered.length;
   document.getElementById('rpf').textContent=pf;
-  document.getElementById('rgan').textContent=(neta>=0?'+':'')+'$'+neta.toFixed(2);
-  document.getElementById('rgan').className='mv '+(neta>=0?'pos':'neg');
+  document.getElementById('rgan').textContent=(balanceReal>=0?'+':'')+'$'+balanceReal.toFixed(2);
+  document.getElementById('rgan').className='mv '+(balanceReal>=0?'pos':'neg');
   document.getElementById('rfee').textContent='-$'+totalFees.toFixed(2);
   document.getElementById('rbest').textContent=bestPar?bestPar[0].split('/')[0]:'—';
 

@@ -490,7 +490,15 @@ function exportPDF(){
 
 document.getElementById('ffecha').value=new Date().toISOString().slice(0,16);
 loadBalance();
-loadTrades().then(()=>{renderHistory();});
+if(window.innerWidth<=768){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.getElementById('tab-reportes').classList.add('on');
+  document.querySelectorAll('.ni')[2].classList.add('on');
+  loadTrades().then(()=>{renderReportes();});
+} else {
+  loadTrades().then(()=>{renderHistory();});
+}
 </script>
 </body>
 </html>

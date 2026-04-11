@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -69,31 +68,30 @@
   .datefilter input{height:34px;padding:0 10px;border:1px solid #1e2535;border-radius:8px;background:#0f1117;color:#e0e0e0;font-size:13px}
   .datefilter input:focus{outline:none;border-color:#3b82f6}
 
-@media (max-width: 768px) {
-.app { flex-direction: column; }
-.sidebar { width: 100% !important; min-width: 100% !important; height: auto; position: relative; }
-.logo { display: inline-block; padding: 1rem 1.25rem; }
-.balance-box { display: inline-block; margin: 0.5rem 1rem; vertical-align: top; }
-.nav { display: flex; flex-direction: row; overflow-x: auto; padding: 0; border-bottom: 1px solid #1e2535; border-top: 1px solid #1e2535; }
-.ni { padding: 10px 1rem; border-left: none !important; border-bottom: 2px solid transparent; white-space: nowrap; flex-shrink: 0; }
-.ni.on { border-left: none !important; border-bottom: 2px solid #3b82f6 !important; background: transparent; }
-.apidot { display: none; }
-.main { margin-left: 0 !important; padding: 1rem; width: 100%; }
-.metrics { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; }
-.calcbar { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; }
-.chartrow { grid-template-columns: 1fr !important; }
-.grid { grid-template-columns: 1fr !important; }
-.btnrow { flex-direction: column; }
-.tblwrap { font-size: 11px; }
-.tbl th, .tbl td { padding: 6px 8px; white-space: nowrap; }
-.ttl { font-size: 15px; }
-.datefilter { flex-wrap: wrap; gap: 6px; }
-.row { gap: 6px; }
-.mc .mv { font-size: 16px; }
-.btn { font-size: 13px; }
-}
+  @media (max-width: 768px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100% !important; min-width: 100% !important; height: auto; position: relative; }
+    .logo { display: inline-block; padding: 1rem 1.25rem; }
+    .balance-box { display: inline-block; margin: 0.5rem 1rem; vertical-align: top; }
+    .nav { display: flex; flex-direction: row; overflow-x: auto; padding: 0; border-bottom: 1px solid #1e2535; border-top: 1px solid #1e2535; }
+    .ni { padding: 10px 1rem; border-left: none !important; border-bottom: 2px solid transparent; white-space: nowrap; flex-shrink: 0; }
+    .ni.on { border-left: none !important; border-bottom: 2px solid #3b82f6 !important; background: transparent; }
+    .apidot { display: none; }
+    .main { margin-left: 0 !important; padding: 1rem; width: 100%; }
+    .metrics { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; }
+    .calcbar { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; }
+    .chartrow { grid-template-columns: 1fr !important; }
+    .grid { grid-template-columns: 1fr !important; }
+    .btnrow { flex-direction: column; }
+    .tblwrap { font-size: 11px; }
+    .tbl th, .tbl td { padding: 6px 8px; white-space: nowrap; }
+    .ttl { font-size: 15px; }
+    .datefilter { flex-wrap: wrap; gap: 6px; }
+    .row { gap: 6px; }
+    .mc .mv { font-size: 16px; }
+    .btn { font-size: 13px; }
+  }
 </style>
-
 </head>
 <body>
 <div id="toast"></div>
@@ -177,69 +175,66 @@
       </div>
     </div>
 
-```
-<!-- HISTORIAL -->
-<div id="tab-historial" class="tab">
-  <div class="row">
-    <div class="ttl">Historial de trades</div>
-    <button class="btn bsm" onclick="exportCSV()">Exportar CSV</button>
-  </div>
-  <div class="tblwrap">
-    <table class="tbl">
-      <thead><tr>
-        <th>Par</th><th>Tipo</th><th>Fecha</th><th>Monto</th><th>Apal.</th>
-        <th>Entrada</th><th>Cierre</th><th>PNL bruto</th><th>Fees</th><th>PNL neto</th><th>Resultado</th><th>Señal</th>
-      </tr></thead>
-      <tbody id="htbody"><tr><td colspan="12" class="note">Cargando...</td></tr></tbody>
-    </table>
-  </div>
-</div>
-
-<!-- REPORTES -->
-<div id="tab-reportes" class="tab">
-  <div class="row">
-    <div class="ttl">Reportes</div>
-    <div style="display:flex;gap:8px">
-      <button class="btn bsm" onclick="exportCSVFiltered()">Excel / CSV</button>
-      <button class="btn bsm" onclick="exportPDF()">PDF</button>
+    <!-- HISTORIAL -->
+    <div id="tab-historial" class="tab">
+      <div class="row">
+        <div class="ttl">Historial de trades</div>
+        <button class="btn bsm" onclick="exportCSV()">Exportar CSV</button>
+      </div>
+      <div class="tblwrap">
+        <table class="tbl">
+          <thead><tr>
+            <th>Par</th><th>Tipo</th><th>Fecha</th><th>Monto</th><th>Apal.</th>
+            <th>Entrada</th><th>Cierre</th><th>PNL bruto</th><th>Fees</th><th>PNL neto</th><th>Resultado</th><th>Señal</th>
+          </tr></thead>
+          <tbody id="htbody"><tr><td colspan="12" class="note">Cargando...</td></tr></tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-  <div class="datefilter">
-    <label>Desde</label>
-    <input type="date" id="fDesde" onchange="applyDateFilter()">
-    <label>Hasta</label>
-    <input type="date" id="fHasta" onchange="applyDateFilter()">
-    <button class="btn bsm" onclick="clearDates()">Ver todo</button>
-  </div>
+    <!-- REPORTES -->
+    <div id="tab-reportes" class="tab">
+      <div class="row">
+        <div class="ttl">Reportes</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn bsm" onclick="exportCSVFiltered()">Excel / CSV</button>
+          <button class="btn bsm" onclick="exportPDF()">PDF</button>
+        </div>
+      </div>
 
-  <div class="metrics">
-    <div class="mc"><div class="ml">Winrate</div><div class="mv" id="rwr">—</div></div>
-    <div class="mc"><div class="ml">Ganancia neta</div><div class="mv" id="rnet">—</div></div>
-    <div class="mc"><div class="ml">Total trades</div><div class="mv" id="rtot">—</div></div>
-    <div class="mc"><div class="ml">Profit factor</div><div class="mv" id="rpf">—</div></div>
-  </div>
-  <div class="metrics">
-    <div class="mc"><div class="ml">Balance total</div><div class="mv" id="rgan">—</div></div>
-    <div class="mc"><div class="ml">Fees pagados</div><div class="mv neg" id="rfee">—</div></div>
-    <div class="mc"><div class="ml">Mejor par</div><div class="mv" id="rbest">—</div></div>
-  </div>
-  <div class="divider"></div>
-  <div class="chartrow">
-    <div class="chartbox">
-      <div class="chtitle">PNL neto por par</div>
-      <div style="position:relative;height:240px"><canvas id="chartPar" role="img" aria-label="PNL por par">PNL por par</canvas></div>
-      <div id="legendPar" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;font-size:12px;color:#8892a4"></div>
+      <div class="datefilter">
+        <label>Desde</label>
+        <input type="date" id="fDesde" onchange="applyDateFilter()">
+        <label>Hasta</label>
+        <input type="date" id="fHasta" onchange="applyDateFilter()">
+        <button class="btn bsm" onclick="clearDates()">Ver todo</button>
+      </div>
+
+      <div class="metrics">
+        <div class="mc"><div class="ml">Winrate</div><div class="mv" id="rwr">—</div></div>
+        <div class="mc"><div class="ml">Ganancia neta</div><div class="mv" id="rnet">—</div></div>
+        <div class="mc"><div class="ml">Total trades</div><div class="mv" id="rtot">—</div></div>
+        <div class="mc"><div class="ml">Profit factor</div><div class="mv" id="rpf">—</div></div>
+      </div>
+      <div class="metrics">
+        <div class="mc"><div class="ml">Balance total</div><div class="mv" id="rgan">—</div></div>
+        <div class="mc"><div class="ml">Fees pagados</div><div class="mv neg" id="rfee">—</div></div>
+        <div class="mc"><div class="ml">Mejor par</div><div class="mv" id="rbest">—</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="chartrow">
+        <div class="chartbox">
+          <div class="chtitle">PNL neto por par</div>
+          <div style="position:relative;height:240px"><canvas id="chartPar" role="img" aria-label="PNL por par">PNL por par</canvas></div>
+          <div id="legendPar" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;font-size:12px;color:#8892a4"></div>
+        </div>
+        <div class="chartbox">
+          <div class="chtitle">Ganadas vs perdidas</div>
+          <div style="position:relative;height:240px"><canvas id="chartWL" role="img" aria-label="Ganadas vs perdidas">Ganadas vs perdidas</canvas></div>
+          <div id="legendWL" style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#8892a4"></div>
+        </div>
+      </div>
     </div>
-    <div class="chartbox">
-      <div class="chtitle">Ganadas vs perdidas</div>
-      <div style="position:relative;height:240px"><canvas id="chartWL" role="img" aria-label="Ganadas vs perdidas">Ganadas vs perdidas</canvas></div>
-      <div id="legendWL" style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#8892a4"></div>
-    </div>
-  </div>
-</div>
-```
-
   </div>
 </div>
 
@@ -473,14 +468,12 @@ function exportPDF(){
     .btn { font-size: 13px; }
   }
 </style></head><body><h1>Abel Trading Journal</h1><div class="period">Periodo: ${desde} → ${hasta} | Generado: ${new Date().toLocaleString('es-DO')}</div><div class="sum"><div class="si"><div class="sl">Trades</div><div class="sv">${filtered.length}</div></div><div class="si"><div class="sl">Winrate</div><div class="sv" style="color:${Math.round(wins/filtered.length*100)>=50?'#059669':'#dc2626'}">${Math.round(wins/filtered.length*100)}%</div></div><div class="si"><div class="sl">PNL neto</div><div class="sv" style="color:${neta>=0?'#059669':'#dc2626'}">${neta>=0?'+':''}$${neta.toFixed(2)}</div></div><div class="si"><div class="sl">Fees</div><div class="sv" style="color:#dc2626">-$${fees.toFixed(2)}</div></div></div><table><thead><tr><th>Par</th><th>Tipo</th><th>Fecha</th><th>Monto</th><th>Apal.</th><th>Entrada</th><th>Cierre</th><th>PNL Bruto</th><th>Fees</th><th>PNL Neto</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
-
-const w=window.open(’’,’_blank’);w.document.write(html);w.document.close();setTimeout(()=>w.print(),500);
+  const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),500);
 }
 
-document.getElementById(‘ffecha’).value=new Date().toISOString().slice(0,16);
+document.getElementById('ffecha').value=new Date().toISOString().slice(0,16);
 loadBalance();
 loadTrades().then(()=>{renderHistory();});
 </script>
-
 </body>
 </html>

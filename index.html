@@ -89,6 +89,8 @@
     .datefilter input{width:100%}
     .row{gap:6px}
     #mobileBalance{display:block!important}
+    .nav{flex-direction:row}
+    .ni:nth-child(3){order:-1}
   }
 </style>
 </head>
@@ -479,6 +481,8 @@ function exportPDF(){
     .datefilter input{width:100%}
     .row{gap:6px}
     #mobileBalance{display:block!important}
+    .nav{flex-direction:row}
+    .ni:nth-child(3){order:-1}
   }
 </style></head><body><h1>Abel Trading Journal</h1><div class="period">Periodo: ${desde} → ${hasta} | Generado: ${new Date().toLocaleString('es-DO')}</div><div class="sum"><div class="si"><div class="sl">Trades</div><div class="sv">${filtered.length}</div></div><div class="si"><div class="sl">Winrate</div><div class="sv" style="color:${Math.round(wins/filtered.length*100)>=50?'#059669':'#dc2626'}">${Math.round(wins/filtered.length*100)}%</div></div><div class="si"><div class="sl">PNL neto</div><div class="sv" style="color:${neta>=0?'#059669':'#dc2626'}">${neta>=0?'+':''}$${neta.toFixed(2)}</div></div><div class="si"><div class="sl">Fees</div><div class="sv" style="color:#dc2626">-$${fees.toFixed(2)}</div></div></div><table><thead><tr><th>Par</th><th>Tipo</th><th>Fecha</th><th>Monto</th><th>Apal.</th><th>Entrada</th><th>Cierre</th><th>PNL Bruto</th><th>Fees</th><th>PNL Neto</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
   const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),500);

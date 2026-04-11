@@ -249,8 +249,8 @@ async function loadBalance(){
 async function loadTrades(desde='',hasta=''){
   try{
     let q='trades?order=fecha.desc';
-    if(desde)q+='&fecha=gte.'+desde+'T00:00';
-    if(hasta)q+='&fecha=lte.'+hasta+'T23:59';
+    if(desde)q+='&fecha=gte.'+desde+' 00:00:00';
+    if(hasta)q+='&fecha=lte.'+hasta+' 23:59:59';
     trades=await supaFetch('GET',q);
     document.getElementById('apidot').style.background='#10b981';
     document.getElementById('apistatus').textContent='Supabase OK';

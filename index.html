@@ -61,6 +61,7 @@
   .chartrow{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
   .chartbox{background:#161b27;border:1px solid #1e2535;border-radius:10px;padding:1.25rem}
   .chtitle{font-size:12px;font-weight:600;color:#8892a4;margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.04em}
+  #btnRefresh{display:none}
   #toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;display:none;z-index:999}
   .tok{background:#10b981;color:#fff}.terr{background:#ef4444;color:#fff}.tinfo{background:#3b82f6;color:#fff}
   .datefilter{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;padding:1rem;background:#161b27;border-radius:10px;border:1px solid #1e2535}
@@ -89,6 +90,7 @@
     .datefilter input{width:100%}
     .row{gap:6px}
     #mobileBalance{display:block!important}
+    #btnRefresh{display:inline-block!important}
     .nav{flex-direction:row}
     .ni:nth-child(3){order:-1}
   }
@@ -404,7 +406,7 @@ function renderReportes(){
   const totalPnlBruto=filtered.reduce((s,t)=>s+(t.pnl_bruto||0),0);
   const neta=filtered.reduce((s,t)=>s+(t.pnl_neto||0),0);
   const totalFees=filtered.reduce((s,t)=>s+(t.fees||0),0);
-  const balanceReal=neta-totalFees;
+  const balanceReal=neta;
   const pf=totalPer>0?(totalGan/totalPer).toFixed(2):'∞';
   const byPar={};
   filtered.forEach(t=>{byPar[t.par]=(byPar[t.par]||0)+(t.pnl_neto||0);});
@@ -481,11 +483,21 @@ function exportPDF(){
     .datefilter input{width:100%}
     .row{gap:6px}
     #mobileBalance{display:block!important}
+    #btnRefresh{display:inline-block!important}
     .nav{flex-direction:row}
     .ni:nth-child(3){order:-1}
   }
 </style></head><body><h1>Abel Trading Journal</h1><div class="period">Periodo: ${desde} → ${hasta} | Generado: ${new Date().toLocaleString('es-DO')}</div><div class="sum"><div class="si"><div class="sl">Trades</div><div class="sv">${filtered.length}</div></div><div class="si"><div class="sl">Winrate</div><div class="sv" style="color:${Math.round(wins/filtered.length*100)>=50?'#059669':'#dc2626'}">${Math.round(wins/filtered.length*100)}%</div></div><div class="si"><div class="sl">PNL neto</div><div class="sv" style="color:${neta>=0?'#059669':'#dc2626'}">${neta>=0?'+':''}$${neta.toFixed(2)}</div></div><div class="si"><div class="sl">Fees</div><div class="sv" style="color:#dc2626">-$${fees.toFixed(2)}</div></div></div><table><thead><tr><th>Par</th><th>Tipo</th><th>Fecha</th><th>Monto</th><th>Apal.</th><th>Entrada</th><th>Cierre</th><th>PNL Bruto</th><th>Fees</th><th>PNL Neto</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table></body></html>`;
   const w=window.open('','_blank');w.document.write(html);w.document.close();setTimeout(()=>w.print(),500);
+}
+
+async function refreshApp(){
+  const btn=document.getElementById('btnRefresh');
+  if(btn){btn.textContent='↻ Cargando...';btn.disabled=true;}
+  await loadBalance();
+  await loadTrades();
+  renderReportes();
+  if(btn){btn.textContent='↻ Actualizar';btn.disabled=false;}
 }
 
 document.getElementById('ffecha').value=new Date().toISOString().slice(0,16);
